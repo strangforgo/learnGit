@@ -108,9 +108,38 @@
 			Git用<<<<<<<，=======，>>>>>>>标记出不同分支的内容
 		#用git log --graph命令可以看到分支合并图
 	#分支管理策略
-		
-			
-		
+		在dev分支上修改后，切换回主分支，进行合并时使用git merge --no-ff -m "merge with no-ff" dev
+		合并分支时，加上--no-ff参数就可以用普通模式合并，合并后的历史分支，能看出
+		来曾经经过合并，而fast-forward合并就看不出来曾经做过合并。
+#多人协作
+	当你从远程仓库克隆时，实际上git自动把本地的master分支和远程master分支对应起来
+	并且，远程仓库的默认名称时origin
+	#查看远程仓库的信息
+		git remote -v
+	#推送分支
+		git push origin master
+	#抓取分支
+		先用git pull把最新的提交从origin/dev抓下来，然后，在本地合并，解决冲突
+		再推送
+		git pull
+	#过程
+		因此，多人协作的工作模式通常是这样：
+		首先，可以试图用git push origin <branch-name>推送自己的修改；
+		如果推送失败，则因为远程分支比你的本地更新，需要先用git pull试图合并；
+		如果合并有冲突，则解决冲突，并在本地提交；
+		没有冲突或者解决掉冲突后，再用git push origin <branch-name>推送就能成功！
+		如果git pull提示no tracking information，则说明本地分支和远程分支的链接关系没有创建，用命令git branch --set-upstream-to <branch-name> origin/<branch-name>。
+		这就是多人协作的工作模式，一旦熟悉了，就非常简单
+	#小结
+		查看远程库信息，使用git remote -v；
+		本地新建的分支如果不推送到远程，对其他人就是不可见的；
+		从本地推送分支，使用git push origin branch-name，如果推送失败，先用git pull抓取远程的新提交；
+		在本地创建和远程分支对应的分支，使用git checkout -b branch-name origin/branch-name，本地和远程分支的名称最好一致；
+		建立本地分支和远程分支的关联，使用git branch --set-upstream branch-name origin/branch-name；
+		从远程抓取分支，使用git pull，如果有冲突，要先处理冲突。
+#学习网址
+	https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000
+	
 			
 
 
