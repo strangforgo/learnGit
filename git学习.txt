@@ -1,0 +1,119 @@
+#版本控制工具：git
+#windows下载链接：
+	在Windows上使用Git，可以从Git官网直接https://git-scm.com/downloads下载，
+	网速慢的同学请移步国内镜像https://pan.baidu.com/s/1kU5OCOB#list/path=%2Fpub%2Fgit），然后按默认选项安装即可。
+#修改自己git的用户名和邮箱：
+	$ git config --global user.name "Your Name"
+	$ git config --global user.email "email@example.com"
+#版本库
+	什么是版本库呢？版本库又名仓库，英文名repository，你可以简单理解成一个目录，
+	这个目录里面的所有文件都可以被Git管理起来，每个文件的修改、删除，Git都能跟踪，
+	以便任何时刻都可以追踪历史，或者在将来某个时刻可以“还原”。
+    #创建一个空目录
+		如果你使用Windows系统，为了避免遇到各种莫名其妙的问题，请确保目录名（包括父目录）不包含中文。
+		mkdir learngit
+		cd learngit
+		pwd  //该命令用于显示当前目录。
+	#通过git init命令把这个目录变成git可以管理的仓库
+	#完成上步操作后，会在自定义目录下看到.git目录，该目录是git
+	用来跟踪管理版本库的，没事千万不要手动修改这个目录里面的文件
+	不然改乱了，就把git仓库给破坏了。如果没有看到.git目录，用
+	ls-ah命令就可见了
+		#版本控制系统的文件类型
+			所有的版本控制系统，其实只能跟踪文本文件的改动，比如TXT文件，网页，所有
+			程序代码等等，而图片/视频/word等二进制文件，只能知道改动前后的文件大小，
+			不知道具体改动了哪些内容，如果要真正使用控制版本系统，就要以纯文本方式
+			编写文件。
+		#文本的编码问题
+			因为文本是有编码的，比如中文有常用的GBK编码，日文有Shift_JIS编码，如果没有历史遗留问题，
+			强烈建议使用标准的UTF-8编码，
+			所有语言使用同一种编码，既没有冲突，又被所有平台所支持。
+	#用命令git add告诉git，将文件添加到仓库
+	#用命令git commit告诉git，把文件提交到仓库
+		其中-m"xxx"中的xxx表示你提交内容的说明
+		可以多次添加很多文件，这些多个文件可以一起提交
+#修改已经在版本库里的文件，执行的操作还是
+	git add和git commit 并且可以使用git status查看git的状态
+#在git中用git log查看版本信息
+	git log 命令显示从最近到最远的提交日志
+	#可以将提示信息缩略显示
+		git log --pretty=oneline
+#git支持版本的回退，和恢复
+	#可以使用git reset --hard HEAD^回到前一个版本
+	 也可以先使用git log查看版本信息，然后使用git reset --hard commit_id来回退到
+	 自己想要回退的版本
+	#如果想回退到当前之后的版本，可以先使用git reflog查看命令历史，以确保回到
+	 未来的哪个版本。
+#工作区
+	git和其它版本控制系统如SVN的一个不同之处就是有暂存区的概念
+	#版本库
+	 工作区有一个隐藏目录.git，这个不算工作区，而是git的版本库
+	  git add命令实际上就是把所要提交的修改存放到暂存区(Stage)，然后，
+	  执行git commit就可以一次性把暂存区的所有修改提交到分支上
+	#注意
+	  我们在创建git版本库时，git自动为我们创建了唯一一个master分支。
+	#区别工作区，暂存区，分支及指向分支的一个指针HEAD
+#管理修改
+	git 比其它版本控制系统设计得优秀，因为git跟踪并管理的是修改，而非文件
+	#只是对加入到缓存区的文件进行合并到分支上
+#撤销修改
+	#git checkout --readme.txt可以把read.txt文件在工作区的修改全部撤销，这里有
+	#git reset HEAD read.txt 可以把暂存区的修改回退到工作区
+	#场景总结
+		场景1：当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令git checkout -- file。
+		场景2：当你不但改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改，分两步，第一步用命令git reset HEAD <file>，就回到了场景1，第二步按场景1操作。
+		场景3：已经提交了不合适的修改到版本库时，想要撤销本次提交，参考版本回退一节，不过前提是没有推送到远程库。
+#删除文件
+	#场景一：当你确定要删除工作区间的文件话，执行git rm test.txt
+	然后再执行 git commit -m"test.txt"
+	#场景二：如果误删，要恢复这个文件，执行 git checkout --test.txt
+#远程仓库
+	#添加远程库
+		要关联一个远程库，使用密令git remote add origin https://github.com/strangforgo/learnGit.git
+		关联后，使用命令git push -u origin master第一次推送master分支的所有内容
+		此后，每次本地提交后，只要有必要，就可以使用命令git push origin master 推送最新修改到。
+	#从远程库克隆
+		实际上开发都是从远程库里下载东西的，多人开发的确是如此
+		#在本地文件目录下使用 git clone git@github.com:strangforgo/learnForVue.git命令
+		便能将远端的文件克隆到本地
+	#注意
+		你也许还注意到，GitHub给出的地址不止一个，还可以用https://github.com/michaelliao/gitskills.git这样的地址。
+		实际上，Git支持多种协议，默认的git://使用ssh，但也可以使用https等其他协议。
+		使用https除了速度慢以外，还有个最大的麻烦是每次推送都必须输入口令，
+		但是在某些只开放http端口的公司内部就无法使用ssh协议而只能用https
+#分支管理
+	#场景；假设你准备开发一个新供能，但需要两周才能完成，第一周你写了50%的代码
+	如果立刻提交，由于代码还没有写完，不完整的代码库会导致别人不能干活了。如果等
+	代码全部写完再一次提交，又存在丢失每天进度的巨大风险
+	#创建和合并分支
+		#前提小知识
+			1 一开始的时候，master分支是一条线，Git用master指向最新的提交，再用
+			HEAD指向master，就能确定当前分支，以及当前分支的提交点
+			2 当我们创建新的分支时，会有一个新的指针dev，指向master相同的提交
+			再把HEAD指向dev，就表示当前分支在dev上
+			3 合并时将master指针指向dev，然后HEAD至此昂master，如果该分支不要，可以删除dev
+			指针
+		#实战命令行
+			使用git checkout -b dev 命令，创建并切换分支，该命令相当于以下两条命令
+			git branch dev
+			git checkout dev
+			然后用git branch查看当前分支 该命令会列出所有分支，当前分支前面会标一个*号
+			合并分支 git merge dev
+			合并完成后，就可以放心地删除dev分支 git branch -d dev		
+	#解决冲突
+		#场景是：同一个文件在主分支上有改动，在其它分支上也有改动，在git merge
+		时就不会执行快速合并，只能试图把各自的修改合并起来，但这种合并就可能
+		会有冲突。
+		#在原文件中，会有修改说明
+			Git用<<<<<<<，=======，>>>>>>>标记出不同分支的内容
+		#用git log --graph命令可以看到分支合并图
+	#分支管理策略
+		
+			
+		
+			
+
+
+	
+	
+		
